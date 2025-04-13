@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/signin", async (req, res) => {
   // 일단 이메일로 로그인, 나중에 아이디로 바꾸겠습니다
-  const { email, password } = req.body;
+  const { user_id, password } = req.body;
   let connection;
 
   try {

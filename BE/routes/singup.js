@@ -2,6 +2,7 @@ import express from "express";
 import dbConnection from "../db/mysqldb.js";
 import riot_api_key from "../config/api_key.js";
 import axios from "axios";
+import { duplicateKeyError } from "../utils/db_error.js";
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
@@ -16,6 +17,7 @@ router.post("/signup", async (req, res) => {
     const { email, password, password2, nickname, tagline, user_id } = req.body;
 
     // db에 저장하기 위해서 puuid 필요함
+    // encodeURI는 한글 그대로 요청 보낼 수 없음 그래서 인코딩 해주기 위해서 사용함.
     const riot_url = `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURI(
       nickname
     )}/${encodeURI(tagline)}?api_key=${riot_api_key}`;
@@ -28,8 +30,6 @@ router.post("/signup", async (req, res) => {
     const params = [riot_puuid, email, password, nickname, tagline, user_id];
 
     if (email && password && password2 && nickname && tagline && user_id) {
-      console.log(email, nickname, tagline);
-
       // db 데이터 추가
       await connection.query(insert_query, params);
       res.status(200).json({ success: "회원가입 성공." });
@@ -37,8 +37,11 @@ router.post("/signup", async (req, res) => {
       res.status(404).json({ err: "데이터 모두 입력하세요." });
     }
   } catch (err) {
-    console.log(err.sqlMessage);
-    res.status(500).json({ err: "데이터 조회 중 오류가 발생했습니다." });
+    const message = err.sqlMessage;
+
+    // utils/db_error.js의 duplicateKeyError 함수
+    const result = duplicateKeyError(message);
+    res.status(result.status).json({ err: result.message });
   } finally {
     if (connection) await connection.end();
   }

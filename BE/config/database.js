@@ -2,7 +2,7 @@
 const dbconfig = {
   host: "localhost",
   user: "root",
-  password: "c4iqhdks2!",
+  password: "1234",
   database: "TFT_PRO",
 };
 

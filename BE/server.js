@@ -1,8 +1,12 @@
 import express from "express";
 import userRouter from "./routes/signin.js";
 import authRouter from "./routes/singup.js";
+import tftRouter from "./routes/tft.js";
 import cors from "cors";
+import dotenv from "dotenv";
 const app = express();
+
+dotenv.config(); // .env 파일 사용할때 이렇게 쓰는거래요
 
 app.use(cors());
 
@@ -20,6 +24,8 @@ app.get("/", (req, res) => {
 // /user를 통해서 오는건 모두 userRouter를 사용하겠다.
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
+app.use("/tft", tftRouter);
+
 app.listen(app.get("port"), () => {
   console.log("TFT_PRO 서버 실행중");
 });

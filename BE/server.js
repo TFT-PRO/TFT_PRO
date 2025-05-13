@@ -2,6 +2,7 @@ import express from "express";
 import userRouter from "./routes/signin.js";
 import authRouter from "./routes/singup.js";
 import friendsRouter from "./routes/friends.js";
+import imageRouter from "./routes/image.js";
 import cors from "cors";
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/friends", friendsRouter);
+app.use("/image", imageRouter);
 app.listen(app.get("port"), () => {
   console.log("TFT_PRO 서버 실행중");
 });

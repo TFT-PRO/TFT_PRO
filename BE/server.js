@@ -2,6 +2,7 @@ import express from "express";
 import userRouter from "./routes/signin.js";
 import authRouter from "./routes/singup.js";
 import friendsRouter from "./routes/friends.js";
+import imageRouter from "./routes/image.js";
 import tftRouter from "./routes/tft.js";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/friends", friendsRouter);
+app.use("/image", imageRouter);
 app.use("/tft", tftRouter);
 
 app.listen(app.get("port"), () => {
